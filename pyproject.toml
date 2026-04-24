@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "vision-track"
+version = "0.1.0"
+description = "Real-time person detection, tracking, and counting system with Streamlit."
+authors = ["Mahdi Kheirkhah <mahdikheirkhah060@gmail.com>"]
+readme = "README.md"
+package-mode = false
+[tool.poetry.dependencies]
+python = "^3.11"
+streamlit = "^1.32.0"
+ultralytics = "^8.1.0"
+supervision = "^0.18.0"
+opencv-python = "^4.9.0"
+
+# --- CROSS-PLATFORM TORCH SETUP ---
+
+# 1. Install this version ONLY on Windows/Linux (Gaming Rig)
+torch = [
+    {version = "2.2.1+cu121", source = "pytorch-gpu-src", markers = "sys_platform != 'darwin'"},
+    {version = "2.2.1", markers = "sys_platform == 'darwin'"} 
+]
+torchvision = [
+    {version = "0.17.1+cu121", source = "pytorch-gpu-src", markers = "sys_platform != 'darwin'"},
+    {version = "0.17.1", markers = "sys_platform == 'darwin'"}
+]
+
+# 2. ONNX Runtime needs to be the standard version for Mac, GPU version for Windows
+onnxruntime = {version = "^1.17.0", markers = "sys_platform == 'darwin'"}
+onnxruntime-gpu = {version = "^1.17.0", markers = "sys_platform != 'darwin'"}
+
+[[tool.poetry.source]]
+name = "pytorch-gpu-src"
+url = "https://download.pytorch.org/whl/cu121"
+priority = "explicit"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

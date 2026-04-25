@@ -29,6 +29,7 @@ onnxruntime = {version = "^1.17.0", markers = "sys_platform == 'darwin'"}
 onnxruntime-gpu = {version = "^1.17.0", markers = "sys_platform != 'darwin'"}
 black = "^26.3.1"
 pytest = "^9.0.3"
+loguru = "^0.7.3"
 
 [[tool.poetry.source]]
 name = "pytorch-gpu-src"

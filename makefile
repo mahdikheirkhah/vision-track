@@ -55,6 +55,9 @@ check-gpu:
 run:
 	$(BIN)/streamlit run app.py
 
+## test: check the tests
+test: 
+	poetry run pytest .
 ## docker-build: Build the container for professional deployment
 docker-build:
 	docker build -t $(PROJECT_NAME):latest .

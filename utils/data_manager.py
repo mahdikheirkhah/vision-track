@@ -1,57 +1,80 @@
 import os
-import shutil
+import yaml
 from pathlib import Path
 from loguru import logger
-from typing import Union, List
+from typing import Dict, List, Tuple, Any
 
 class DataOrganizer:
     """
-    Handles the structured organization of raw videos and COCO datasets
-    into a YOLOv8-compatible directory tree.
+    Manages dataset paths and file pairs for VisionTrack.
+    Follows strict OOP and Loguru standards.
     """
 
-    def __init__(self, root_dir: str = "data"):
-        """
-        Initializes the organizer with a root data directory.
-        
-        Args:
-            root_dir (str): The base directory for data storage.
-        """
-        self.root = Path(root_dir)
-        self.raw_path = self.root / "raw_videos"
-        self.coco_path = self.root / "coco_dataset"
-        self._init_structure()
+    def __init__(self, yaml_path: str):
+        self.yaml_path = Path(yaml_path)
+        self.root = self.yaml_path.parent
+        self.config = self._load_yaml()
 
-    def _init_structure(self) -> None:
-        """Creates the initial directory structure if it doesn't exist."""
+    def _load_yaml(self) -> Dict[str, Any]:
+        """Loads the Roboflow dataset configuration."""
         try:
-            for path in [self.raw_path, self.coco_path]:
-                path.mkdir(parents=True, exist_ok=True)
-            logger.success("Data directory structure verified.")
+            with open(self.yaml_path, "r") as f:
+                return yaml.safe_load(f)
         except Exception as e:
-            logger.error(f"Failed to initialize directories: {e}")
+            logger.error(f"Failed to load data.yaml: {e}")
             raise
-
-    def organize_raw_video(self, source_path: str) -> bool:
-        """
-        Moves a raw video into the managed raw_videos folder.
         
-        Args:
-            source_path (str): Current path of the video file.
-            
-        Returns:
-            bool: True if successful, False otherwise.
+    def get_split_paths(self, split: str):
+        raw_path = self.config.get(split)
+        if not raw_path:
+            raise ValueError(f"Split '{split}' not found in yaml config.")
+
+        # FIX: Robustly handle Roboflow's '../' quirk
+        # If it's a relative path starting with .., we anchor it to the yaml folder
+        if raw_path.startswith(".."):
+            # .parts[1:] removes the '..' component effectively
+            clean_path = Path(*Path(raw_path).parts[1:])
+            img_dir = (self.yaml_path / clean_path).resolve()
+        else:
+            # Use 'path' key if it exists, otherwise assume relative to yaml
+            base_path = self.config.get('path', self.yaml_path)
+            img_dir = (Path(base_path) / raw_path).resolve()
+
+        # In your structure, labels are siblings to images: train/images -> train/labels
+        label_dir = img_dir.parent / "labels"
+        return img_dir, label_dir
+    
+    def get_image_label_pairs(self, split: str = "train") -> List[Tuple[Path, Path]]:
+        """
+        Pairs images with Roboflow-formatted labels using pattern matching.
         """
         try:
-            src = Path(source_path)
-            if not src.exists():
-                logger.warning(f"Source file not found: {source_path}")
-                return False
+            img_dir, label_dir = self.get_split_paths(split)
+            logger.info(f"Searching {split} split in: {img_dir}")
+
+            pairs = []
+            # Roboflow images often have .jpg extension
+            images = list(img_dir.glob("*.jpg"))
             
-            dest = self.raw_path / src.name
-            shutil.move(str(src), str(dest))
-            logger.info(f"Organized video: {src.name} -> {self.raw_path}")
-            return True
+            for img_path in images:
+                # Roboflow format: [image_stem]_jpg.rf.[hash].txt
+                # We search for any .txt file starting with the image stem
+                search_pattern = f"{img_path.stem}*.txt"
+                matching_labels = list(label_dir.glob(search_pattern))
+                
+                if matching_labels:
+                    # Take the first match (usually only one exists)
+                    pairs.append((img_path, matching_labels[0]))
+                else:
+                    logger.warning(f"No label found for {img_path.name} using pattern {search_pattern}")
+
+            logger.success(f"Successfully paired {len(pairs)}/{len(images)} files.")
+            return pairs
+
         except Exception as e:
-            logger.error(f"Error organizing video {source_path}: {e}")
-            return False
+            logger.error(f"Critical error during file pairing: {e}")
+            return []
+        
+        
+        
+        

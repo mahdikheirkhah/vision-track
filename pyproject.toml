@@ -32,6 +32,8 @@ pytest = "^9.0.3"
 loguru = "^0.7.3"
 inference-sdk = "^1.2.5"
 jupyter = "^1.1.1"
+cv = "^1.0.0"
+pycocotools = "^2.0.11"
 
 [[tool.poetry.source]]
 name = "pytorch-gpu-src"

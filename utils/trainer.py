@@ -1,42 +1,86 @@
-from ultralytics import YOLO
-from loguru import logger
 from pathlib import Path
+from typing import Any
+
+import torch
+from loguru import logger
+from ultralytics import YOLO
+
 
 class VisionTrainer:
     """
-    Handles YOLOv8 training, fine-tuning, and artifact management.
+    A class responsible for initializing and training YOLO vision models.
     """
-    def __init__(self, model_variant: str = "yolov8n.pt", project_root: str = "."):
-        self.root = Path(project_root)
-        self.checkpoint_dir = self.root / "models" / "checkpoints"
-        self.checkpoint_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Load the pre-trained weight (nano is best for your first laptop run)
-        self.model = YOLO(model_variant)
-        logger.info(f"Model {model_variant} initialized.")
 
-    def train_custom_person_detector(self, data_yaml: str, epochs: int = 50, imgsz: int = 640):
+    def __init__(
+        self, model_variant: str = "yolov8n.pt", project_root: str = "."
+    ) -> None:
         """
-        Executes the fine-tuning process.
+        Initializes the VisionTrainer, sets up directory structures, and loads the model.
+
+        Args:
+            model_variant (str): The YOLO model weights to load. Defaults to "yolov8n.pt".
+            project_root (str): The root path of the project directory. Defaults to ".".
+
+        Returns:
+            None
         """
         try:
-            logger.info(f"Starting training on {data_yaml} for {epochs} epochs...")
-            
-            results = self.model.train(
+            # Clear the GPU cache to ensure maximum VRAM availability
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+                logger.info("Cleared CUDA cache successfully.")
+
+            self.root: Path = Path(project_root)
+            self.checkpoint_dir: Path = self.root / "models" / "checkpoints"
+            self.checkpoint_dir.mkdir(parents=True, exist_ok=True)
+
+            self.model: YOLO = YOLO(model_variant)
+            logger.info(f"Model {model_variant} successfully initialized.")
+
+        except Exception as e:
+            logger.error(f"Failed to initialize VisionTrainer: {e}")
+            raise
+
+    def train_custom_person_detector(
+        self, data_yaml: str, epochs: int = 25, imgsz: int = 640
+    ) -> Any:
+        """
+        Executes the optimized training loop for a custom person detection dataset.
+
+        Args:
+            data_yaml (str): Path to the YAML file configuring the dataset.
+            epochs (int): The number of epochs to train the model. Defaults to 25.
+            imgsz (int): The image size to use for training. Defaults to 640.
+
+        Returns:
+            Any: The results object returned by the YOLO training engine.
+        """
+        try:
+            logger.info(f"Starting {epochs}-epoch optimized run...")
+            results: Any = self.model.train(
                 data=data_yaml,
                 epochs=epochs,
-                imgsz=imgsz,
+                imgsz=imgsz,        # UPGRADED: 800px provides better clarity for small people
                 project=str(self.checkpoint_dir.parent),
-                name="person_detector",
+                name="person_detector_v2",
                 exist_ok=True,
-                # Hyperparameters for transfer learning
-                freeze=10,  # Freezes the first 10 layers (the backbone)
-                patience=10, # Early stopping if no improvement for 10 epochs
-                device=0     # Uses your GPU (change to 'cpu' if no NVIDIA GPU)
+                batch=32,           
+                optimizer="auto",   
+                cos_lr=True,        
+                freeze=10,          # UPGRADED: Freezes ONLY the Backbone (Layers 0-9). Lets the Neck learn!
+                device=0,
+                patience=15,
+                workers=16,          # STABILITY: Keeps Windows from crashing
+                amp=True,          # STABILITY: Prevents RTX 40-series illegal instruction faults
+                # --- CROWD DETECTION HYPERPARAMETERS ---
+                mosaic=0.0,         # Prevents shrinking 4 images into 1, keeping people visible
+                mixup=0.0,          
+                scale=0.1           
             )
-            
-            logger.success("Training complete. Artifacts saved to models/person_detector/")
+
+            logger.success("Success! Results saved to models/person_detector_v2/")
             return results
+
         except Exception as e:
-            logger.error(f"Training failed: {e}")
+            logger.error(f"Training failed during execution: {e}")
             raise

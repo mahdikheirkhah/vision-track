@@ -5,10 +5,11 @@ description = "Real-time person detection, tracking, and counting system with St
 authors = ["Mahdi Kheirkhah <mahdikheirkhah060@gmail.com>"]
 readme = "README.md"
 package-mode = false
+
 [tool.poetry.dependencies]
-python = ">=3.11,<3.13"
+python = ">=3.11,<3.15"
 streamlit = "^1.32.0"
-ultralytics = "^8.4.42"
+ultralytics = "^8.4.48"
 supervision = "^0.27.0.post2"
 opencv-python = "^4.9.0"
 
@@ -16,28 +17,26 @@ opencv-python = "^4.9.0"
 
 # 1. Install this version ONLY on Windows/Linux (Gaming Rig)
 torch = [
-    {version = "2.2.1+cu121", source = "pytorch-gpu-src", markers = "sys_platform != 'darwin'"},
-    {version = "2.2.1", markers = "sys_platform == 'darwin'"} 
+    {version = ">=2.2.1", source = "pytorch-gpu-src", markers = "sys_platform != 'darwin'"},
 ]
 torchvision = [
-    {version = "0.17.1+cu121", source = "pytorch-gpu-src", markers = "sys_platform != 'darwin'"},
-    {version = "0.17.1", markers = "sys_platform == 'darwin'"}
+    {version = ">=0.17.1", source = "pytorch-gpu-src", markers = "sys_platform != 'darwin'"},
 ]
 
 # 2. ONNX Runtime needs to be the standard version for Mac, GPU version for Windows
 onnxruntime = {version = "^1.17.0", markers = "sys_platform == 'darwin'"}
 onnxruntime-gpu = {version = "^1.17.0", markers = "sys_platform != 'darwin'"}
+
 black = "^26.3.1"
 pytest = "^9.0.3"
 loguru = "^0.7.3"
 jupyter = "^1.1.1"
-cv = "^1.0.0"
 pycocotools = "^2.0.1"
-numpy = "1.26.4"
+numpy = ">=1.26.4"  # FIX: Made flexible for Python 3.14 compatibility!
 
 [[tool.poetry.source]]
 name = "pytorch-gpu-src"
-url = "https://download.pytorch.org/whl/cu121"
+url = "https://download.pytorch.org/whl/cu126"
 priority = "explicit"
 
 [build-system]

@@ -76,7 +76,7 @@ def main() -> None:
         # 2. UPGRADED: Increased epochs from 20 to 50
         results = trainer.train_custom_person_detector(
             data_yaml="data/coco/data.yml", 
-            epochs=3,
+            epochs=60,
             imgsz=640
         )
 

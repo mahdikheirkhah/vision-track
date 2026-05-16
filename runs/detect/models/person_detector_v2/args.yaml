@@ -2,7 +2,7 @@ task: detect
 mode: train
 model: yolo26s.pt
 data: data/coco/data.yml
-epochs: 3
+epochs: 60
 time: null
 patience: 15
 batch: 8
@@ -11,7 +11,7 @@ save: true
 save_period: -1
 cache: false
 device: '0'
-workers: 8
+workers: 2
 project: models
 name: person_detector_v2
 exist_ok: true
@@ -25,7 +25,7 @@ rect: false
 cos_lr: true
 close_mosaic: 10
 resume: false
-amp: true
+amp: false
 fraction: 1.0
 profile: false
 freeze: 10
@@ -107,4 +107,4 @@ auto_augment: randaugment
 erasing: 0.4
 cfg: null
 tracker: botsort.yaml
-save_dir: /mnt/d/vision-track/runs/detect/models/person_detector_v2
+save_dir: /home/mahdi/vision-track/runs/detect/models/person_detector_v2

@@ -36,17 +36,12 @@ class COCOManager:
     def generate_labels(
         self,
         background_ratio: float = 0.10,
-        max_person_images: int = None
+        max_person_images: int = None,
+        allow_all_backgrounds: bool = False
         ) -> None:
         """
         Generates YOLO format labels, including a specific ratio of background 
         images (images with no people) to reduce False Positives during training.
-
-        Args:
-            background_ratio (float): The ratio of background images to person images. 
-                                      0.10 means 10% background images.
-            max_person_images (int, optional): The maximum number of person images to include. 
-                                               Useful for creating smaller datasets for faster training.
         """
         try:
             # 1. Get ALL image IDs in the COCO dataset
@@ -58,34 +53,34 @@ class COCOManager:
             # 3. Create our working list of person images to process
             person_img_ids_to_process: List[int] = list(all_person_img_ids)
             
-            # --- NEW CAPABILITY: Subsample person images if requested ---
+            # Subsample person images if requested
             if max_person_images is not None and max_person_images < len(person_img_ids_to_process):
-                logger.info(f"Subsampling dataset: Limiting from {len(person_img_ids_to_process)} to {max_person_images} person images.")
+                logger.info(f"Subsampling dataset: Limiting to {max_person_images} person images.")
                 person_img_ids_to_process = random.sample(person_img_ids_to_process, max_person_images)
             
-            # 4. Safely calculate background images
-            # We MUST subtract `all_person_img_ids` (not the subsample) so we don't 
-            # accidentally pick a left-out person image as an empty background!
+            # Safely isolate background images by excluding all known person image IDs
             safe_background_img_ids: List[int] = list(all_img_ids - all_person_img_ids)
             
-            # 5. Calculate how many background images we need based on our SUBSAMPLED person count
-            num_background_to_keep: int = int(len(person_img_ids_to_process) * background_ratio)
-            
-            # Randomly sample the background images
-            sampled_background_ids: List[int] = random.sample(
-                safe_background_img_ids, 
-                min(num_background_to_keep, len(safe_background_img_ids))
-            )
-            
-            # Combine them for the final processing list
+            # --- SELECTION LOGIC ALTERATION ---
+            if allow_all_backgrounds:
+                sampled_background_ids = safe_background_img_ids
+                logger.info("Including 100% of available background images for validation.")
+            else:
+                num_background_to_keep: int = int(len(person_img_ids_to_process) * background_ratio)
+                sampled_background_ids = random.sample(
+                    safe_background_img_ids, 
+                    min(num_background_to_keep, len(safe_background_img_ids))
+                )
+        
+            # Combine subsets into the final asset processing array
             final_img_ids: List[int] = person_img_ids_to_process + sampled_background_ids
-            
+        
             logger.info(f"Processing {len(person_img_ids_to_process)} images with people.")
             logger.info(f"Processing {len(sampled_background_ids)} background images (Empty labels).")
             
             for img_id in final_img_ids:
                 self._process_single_image(img_id)
-                
+            
             logger.success("Label generation complete!")
 
         except Exception as e:
@@ -106,6 +101,10 @@ class COCOManager:
             yolo_lines = []
             for ann in anns:
                 bbox = ann['bbox']
+                # SAFETY FILTER: Ignore corrupt COCO annotations with zero width or height
+                if bbox[2] <= 0 or bbox[3] <= 0:
+                    logger.warning(f"Skipping corrupt annotation in img {img_id}: width/height is zero.")
+                    continue
                 # Convert to YOLO: [x_center, y_center, width, height] normalized 0-1
                 x_center = (bbox[0] + bbox[2] / 2) / w
                 y_center = (bbox[1] + bbox[3] / 2) / h

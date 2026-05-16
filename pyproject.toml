@@ -7,7 +7,7 @@ readme = "README.md"
 package-mode = false
 
 [tool.poetry.dependencies]
-python = ">=3.11,<3.15"
+python = ">=3.11,<3.14"
 streamlit = "^1.32.0"
 ultralytics = "^8.4.48"
 supervision = "^0.27.0.post2"
@@ -36,7 +36,7 @@ numpy = ">=1.26.4"  # FIX: Made flexible for Python 3.14 compatibility!
 
 [[tool.poetry.source]]
 name = "pytorch-gpu-src"
-url = "https://download.pytorch.org/whl/cu126"
+url = "https://download.pytorch.org/whl/nightly/cu128"
 priority = "explicit"
 
 [build-system]

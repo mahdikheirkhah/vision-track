@@ -47,28 +47,28 @@ def main() -> None:
     try:
         logger.info("Initializing the supercharged training pipeline...")
         # Create a fast Training set (10,000 people + 10% background = 11,000 total images)
-        # train_manager = COCOManager(
-        #     annotation_path="data/coco/annotations/instances_train2017.json",
-        #     image_dir="data/coco/images/train2017",
-        #     output_dir="data/coco/labels/train2017"
-        # )
-        # train_manager.generate_labels(background_ratio=0.10, max_person_images=10000)
+        train_manager = COCOManager(
+            annotation_path="data/coco/annotations/instances_train2017.json",
+            image_dir="data/coco/images/train2017",
+            output_dir="data/coco/labels/train2017"
+        )
+        train_manager.generate_labels(background_ratio=0.10, max_person_images=None)
 
         # # Create a fast Validation set (1,000 people + 10% background = 1,100 total images)
-        # val_manager = COCOManager(
-        #     annotation_path="data/coco/annotations/instances_val2017.json",
-        #     image_dir="data/coco/images/val2017",
-        #     output_dir="data/coco/labels/val2017"
-        # )
-        # val_manager.generate_labels(background_ratio=0.10, max_person_images=1000)
-        # validator_train = YOLOLabelValidator(label_dir="data/coco/labels/train2017")
-        # validator_train.run_validation()
+        val_manager = COCOManager(
+            annotation_path="data/coco/annotations/instances_val2017.json",
+            image_dir="data/coco/images/val2017",
+            output_dir="data/coco/labels/val2017"
+        )
+        val_manager.generate_labels(max_person_images=None, allow_all_backgrounds=True)
+        validator_train = YOLOLabelValidator(label_dir="data/coco/labels/train2017")
+        validator_train.run_validation()
 
-        # validator_val = YOLOLabelValidator(label_dir="data/coco/labels/val2017")
-        # validator_val.run_validation()
+        validator_val = YOLOLabelValidator(label_dir="data/coco/labels/val2017")
+        validator_val.run_validation()
         # 1. UPGRADED: Changed yolov8n.pt to yolov8s.pt (Small model for higher precision)
         trainer: VisionTrainer = VisionTrainer(
-            model_variant="yolo26s.pt", project_root="."
+            model_variant="yolo26m.pt", project_root="."
         )
 
         logger.info("Kicking off the person detector training sequence...")

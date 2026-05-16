@@ -60,23 +60,23 @@ class VisionTrainer:
             results: Any = self.model.train(
                 data=data_yaml,
                 epochs=epochs,
-                imgsz=imgsz,        # UPGRADED: 800px provides better clarity for small people
+                imgsz=imgsz,        
                 project=str(self.checkpoint_dir.parent),
                 name="person_detector_v2",
-                exist_ok=True,
-                batch=8,           
+                exist_ok=True,          
                 optimizer="auto",   
                 cos_lr=True,        
-                freeze=10,          # UPGRADED: Freezes ONLY the Backbone (Layers 0-9). Lets the Neck learn!
+                freeze=10,          
                 device=0,
-		        cache=False,
                 patience=15,
-                workers=2,          # STABILITY: Keeps Windows from crashing
-                amp=False,          # STABILITY: Prevents RTX 40-series illegal instruction faults
-                # # --- CROWD DETECTION HYPERPARAMETERS ---
-                # mosaic=0.0,         # Prevents shrinking 4 images into 1, keeping people visible
-                # mixup=0.0,          
-                # scale=0.1           
+                batch=96,           
+                workers=24,         
+                cache=False,        
+                amp=True,           
+                # --- CROWD DETECTION HYPERPARAMETERS ---
+                mosaic=0.0,         
+                mixup=0.0,          
+                scale=0.1           
             )
 
             logger.success("Success! Results saved to models/person_detector_v2/")

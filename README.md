@@ -1,9 +1,3 @@
-Here is a highly professional, comprehensive `README.md` for your project. It highlights both the heavy AI engineering you did on the cloud GPU and the highly optimized software architecture you built for the local dashboard.
-
-You can copy and paste this directly into your `README.md` file. Just remember to replace the `[INSERT ... HERE]` placeholders with your actual images and video links!
-
----
-
 # 👁️ Vision-Track: Real-Time Person Detection, Tracking & Counting
 
 ## 🎯 Project Overview & Goals
@@ -36,9 +30,9 @@ We chose the **YOLO26 (Medium)** architecture for the perfect balance between in
 
 > *Below: Examples from our validation batch labels compared to the model's actual predictions.*
 
-    ![labeled images as a batch](./runs/detect/models/person_detector_v2/val_batch2_labels.jpg)
+![labeled images as a batch](./runs/detect/models/person_detector_v2/val_batch2_labels.jpg)
 
-    ![predicted images as a batch](./runs/detect/models/person_detector_v2/val_batch2_pred.jpg)
+![predicted images as a batch](./runs/detect/models/person_detector_v2/val_batch2_pred.jpg)
 
 ### Phase 3: Evaluation & Edge Optimization
 

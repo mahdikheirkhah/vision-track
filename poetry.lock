@@ -2629,37 +2629,23 @@ files = [
 ]
 
 [[package]]
-name = "onnxruntime"
+name = "onnxruntime-gpu"
 version = "1.26.0"
 description = "ONNX Runtime is a runtime accelerator for Machine Learning models"
 optional = false
 python-versions = ">=3.11"
 groups = ["main"]
 files = [
-    {file = "onnxruntime-1.26.0-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:ee1109ef4ef27cad90e823399e61e03b3c6c7bfe0fb820b4baf3678c15be8b3c"},
-    {file = "onnxruntime-1.26.0-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:35c7c7b0ac2e02001d28fab6c9fc24e9abc5e6faa35e6e19c63cecf1406ba89f"},
-    {file = "onnxruntime-1.26.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:11a8df4dcfe9ad5ff0bd71a7571dbed019fabc7594676c89fe8b86ea029c246f"},
-    {file = "onnxruntime-1.26.0-cp311-cp311-win_amd64.whl", hash = "sha256:e6456718125fd777c673f3b78d4a9ab58d6adea641e9afae85ee6444f0e0e9a9"},
-    {file = "onnxruntime-1.26.0-cp311-cp311-win_arm64.whl", hash = "sha256:cd920e45b730e4a87833e2910d8ca375aaca9da6ccc09e24bce463b3356d637f"},
-    {file = "onnxruntime-1.26.0-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:05b028781b322ad74b57ce5b50aa5280bb1fe96ceec334628ade681e0b24c1ac"},
-    {file = "onnxruntime-1.26.0-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:91f2bb870a4b9224eba0a6728c1fa7a9e552b8e59e1083c51fbbc3d013f2b5c0"},
-    {file = "onnxruntime-1.26.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:9b6dd70599005bd1bf29779f04a91978b92b5e719c11a20068a8f8e535f725b6"},
-    {file = "onnxruntime-1.26.0-cp312-cp312-win_amd64.whl", hash = "sha256:a26374dc7fbcaae593601086b242120e13f2310558df0991da6dd8b8fac00414"},
-    {file = "onnxruntime-1.26.0-cp312-cp312-win_arm64.whl", hash = "sha256:54a8053410fd31fd66469bd754fcfe8a4df9f7eb44756b4b5479bf50c842d948"},
-    {file = "onnxruntime-1.26.0-cp313-cp313-macosx_14_0_arm64.whl", hash = "sha256:ccce19c5f771b8268902f77d9fed9e88f9499465d6780808faa6611a789d33f0"},
-    {file = "onnxruntime-1.26.0-cp313-cp313-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:bdbed8cf3b672b66acb032f33a253bc27f42bce6ece48ae3fab4fa483a5e96e0"},
-    {file = "onnxruntime-1.26.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:c07af6fc6d5557835f2b6ee7a96d8b3235d0c57a8e230efdedaee106a8a3cbc6"},
-    {file = "onnxruntime-1.26.0-cp313-cp313-win_amd64.whl", hash = "sha256:61bec80655efa460591c2bc655392d57d2650ce85533a6b9b3b7a790d7ea7916"},
-    {file = "onnxruntime-1.26.0-cp313-cp313-win_arm64.whl", hash = "sha256:a6677545ff451e3539a02746d2f207d8c5baa4a0a818886bb9d6a6eb9511ee89"},
-    {file = "onnxruntime-1.26.0-cp313-cp313t-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:5e016edc15d3c19f36807e1c6b10be5b27807688c32720f91b5ae480a95215d0"},
-    {file = "onnxruntime-1.26.0-cp313-cp313t-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:f5fc48a91a046a6a5c9b147f83fb41d65d24d24923373b222cdd248f0f4f4aac"},
-    {file = "onnxruntime-1.26.0-cp314-cp314-macosx_14_0_arm64.whl", hash = "sha256:33a791f31432a3af1a96db5e54818b37aba5e5eefc2e6af5794c10a9118a9993"},
-    {file = "onnxruntime-1.26.0-cp314-cp314-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:e90c00732c4553618103149d93f688e8c3063017938f8983e21a71d9f3b6d22e"},
-    {file = "onnxruntime-1.26.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:01498e80ba8988428d08c2d51b1338f89e3de2a93e6ffe555f79c68f26a5c06b"},
-    {file = "onnxruntime-1.26.0-cp314-cp314-win_amd64.whl", hash = "sha256:7ead61450d8405167c87dd3a31d8da1d576b490a57dab1aa8b82a7da6825f5aa"},
-    {file = "onnxruntime-1.26.0-cp314-cp314-win_arm64.whl", hash = "sha256:31d71a53490e46910877d0902b5ad99c69a5955e5c7ea6c82863519410e1ba7c"},
-    {file = "onnxruntime-1.26.0-cp314-cp314t-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:d7b6d258fb78fdfcf049795bcfaa74dcb90ae7baa277afd21e6fd28b83f2c496"},
-    {file = "onnxruntime-1.26.0-cp314-cp314t-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:4eefd386a45202aefb7a5132b94f32df9d506c9edcc7faf2fc60d65183f4b183"},
+    {file = "onnxruntime_gpu-1.26.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:4fa231294c2643911d2a7d16469c4808b0bdcdc4b5f4063d3a53744ce25b683a"},
+    {file = "onnxruntime_gpu-1.26.0-cp311-cp311-win_amd64.whl", hash = "sha256:cc5329aad02d9745cc3ae9cdb185bfa1aad242a7bf89b8c471280002ec40f98a"},
+    {file = "onnxruntime_gpu-1.26.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:3c01119ed4d9449d60367fa8ccffcd02bd3fe736754284e4b198d131f54edad6"},
+    {file = "onnxruntime_gpu-1.26.0-cp312-cp312-win_amd64.whl", hash = "sha256:5f49c44689894650990e4c8a857d2edafc276fbd79bba57ceb224bd18d25d491"},
+    {file = "onnxruntime_gpu-1.26.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:cfda2fad535595bfc3e570eb588092717711dcb2957656d814695e0c9ceb1508"},
+    {file = "onnxruntime_gpu-1.26.0-cp313-cp313-win_amd64.whl", hash = "sha256:6ab9f9c741d2e239b2e321ab0d389c04329d4ab7f11e3b92dd3aa7db1c59dee4"},
+    {file = "onnxruntime_gpu-1.26.0-cp313-cp313t-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:bcf6f347cad9f88a9a625c2b352cf9de927528aedb627ebbc089a201f1990b94"},
+    {file = "onnxruntime_gpu-1.26.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:9e6e4fb1ec9ae1cf456534d9115f106ab2a1ae96fa513b4ed0f4795302b4a2c6"},
+    {file = "onnxruntime_gpu-1.26.0-cp314-cp314-win_amd64.whl", hash = "sha256:3e592439b0183d303c2374517b5b392599a3d50b2dc9de949b9b15731ac921c9"},
+    {file = "onnxruntime_gpu-1.26.0-cp314-cp314t-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:56dc7b73954ff4bdc71f5b8ab306b6f61be5d007881b6ef423a609e2b9cd088b"},
 ]
 
 [package.dependencies]
@@ -2669,7 +2655,9 @@ packaging = "*"
 protobuf = "*"
 
 [package.extras]
-quantization = ["ml_dtypes"]
+cuda = ["nvidia-cuda-nvrtc-cu12 (>=12.0,<13.0)", "nvidia-cuda-runtime-cu12 (>=12.0,<13.0)", "nvidia-cufft-cu12 (>=11.0,<12.0)", "nvidia-curand-cu12 (>=10.0,<11.0)"]
+cudnn = ["nvidia-cudnn-cu12 (>=9.0,<10.0)"]
+quantization = ["ml-dtypes"]
 symbolic = ["sympy"]
 
 [[package]]
@@ -4817,4 +4805,4 @@ dev = ["black (>=19.3b0) ; python_version >= \"3.6\"", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<3.14"
-content-hash = "4c163e161d3637bf559c3d845b9810b26a854a79db1311256c238dd29e7be152"
+content-hash = "115ddefdfd67a612562e0700404d842f0ecb9becdac116bbdc0b779d28b901a1"

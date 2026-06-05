@@ -55,6 +55,7 @@ The final inference engine is wrapped in a high-speed, zero-latency **Streamlit*
 #### 🎥 Dashboard Demo
 
 > *Below: The Streamlit dashboard running real-time tracking and cumulative analytics.
+
 [![Watch the video](https://img.youtube.com/vi/GMvXrzSUPsgD/maxresdefault.jpg)](https://youtu.be/GMvXrzSUPsgD)
 >
 ---

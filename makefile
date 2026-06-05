@@ -1,6 +1,6 @@
 # --- Configuration ---
 PROJECT_NAME = vision-track
-PYTHON_VERSION = 3.11
+PYTHON_VERSION = 3.12
 VENV = .venv
 
 # OS Detection and Path Configuration

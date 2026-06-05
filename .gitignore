@@ -6,3 +6,4 @@ data/
 models/checkpoints/*.pt
 logs/
 data/*
+yolo*.pt

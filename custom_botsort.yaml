@@ -1,0 +1,16 @@
+# custom_botsort.yaml
+tracker_type: botsort
+track_high_thresh: 0.4    
+track_low_thresh: 0.1     
+new_track_thresh: 0.5     
+match_thresh: 0.8         
+track_buffer: 120         
+
+# Base BoT-SORT advanced parameters
+gmc_method: sparseOptFlow
+proximity_thresh: 0.5
+appearance_thresh: 0.25
+with_reid: False
+
+# --- THE MISSING PARAMETER FOR ULTRALYTICS v8.4+ ---
+fuse_score: True
